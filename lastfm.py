@@ -123,7 +123,7 @@ class Session(PylastSessionCreator, pylast.LastFMNetwork):
             self.database_handler = SessionDatabaseHandler
 
     def finalize(self):
-        """ After the user authorizes with the URL, run this function to set the key and optionally save it do the db, or do it yourself. Errors if the user has not authorized yet, returns True if they have. """
+        """ After the user authorizes with the URL, run this function to set the key. Errors if the user has not authorized yet, returns True if they have. """
         try:
             key = self.get_session_key()
             self.session_key = key
