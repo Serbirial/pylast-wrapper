@@ -96,11 +96,10 @@ class PylastSessionCreator(object):
                 session_skg = session.skg 
 
         """
+        super().__init__(api_key, api_secret, network)
         if network == None:
-            self.network = pylast.LastFMNetwork(api_key, api_secret)
-        else:
-            self.network = network
-        self.skg = pylast.SessionKeyGenerator(self.network)
+            network = self
+        self.skg = pylast.SessionKeyGenerator(network=network)
         self.url = self.skg.get_web_auth_url()
 
     def get_session_key(self):
@@ -115,16 +114,19 @@ class Session(PylastSessionCreator, pylast.LastFMNetwork):
         If you want to use the PylastSessionHandler, please create the object with needed arguments/etc.
     """
     def __init__(self, api_key: str, api_secret: str, network: pylast.LastFMNetwork = None, session_key: str = None, SessionDatabaseHandler: PylastSessionHandler = None): 
-        super().__init__(api_key, api_secret, network)
+        self.api_key = api_key
+        self.api_secret = api_secret
+        super().__init__(self.api_key, self.api_secret, network)
         if session_key != None:
-            self.network.session_key = session_key
+            self.session_key = session_key
         if SessionDatabaseHandler != None:
             self.database_handler = SessionDatabaseHandler
 
     def finalize(self):
-        """ After the user authorizes with the URL, run this function to set the key, or do it yourself. Errors if the user has not authorized yet, returns True if they have. """
+        """ After the user authorizes with the URL, run this function to set the key and optionally save it do the db, or do it yourself. Errors if the user has not authorized yet, returns True if they have. """
         try:
-            self.network.session_key = self.get_session_key()
+            key = self.get_session_key()
+            self.session_key = key
         finally:
             return True
 
