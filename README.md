@@ -6,7 +6,9 @@
  Key based sessions\
  Simple pre-made database(s) to save session keys
  
- 
+# Installation 
+ For now, all you do is add `lastfm.py` to your project folder, then import it and use it based on the examples or (future) documentation.
+
 # For now
  Everything is in one file, that will change.\
  Naming might not be right, classes are prone to name changes, function naming might be changed, etc.\
